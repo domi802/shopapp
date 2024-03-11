@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shopapp/viesws/register_screen.dart';
+import 'package:shopapp/viesws/login_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  LoginScreen({super.key});
+  RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Login your account",
+                    "Create your account",
                     style: GoogleFonts.getFont(
                       'Lato',
                       color: const Color(0xFF0d120E),
@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Enter your Email';
+                        return 'enter your email';
                       } else {
                         return null;
                       }
@@ -97,6 +97,52 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
+                      'Full Name',
+                      style: GoogleFonts.getFont(
+                        'Nunito Sans',
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "enter your full name";
+                      } else {
+                        return null;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      labelText: 'enter your full name',
+                      labelStyle: GoogleFonts.getFont(
+                        'Nunito Sans',
+                        fontSize: 14,
+                        letterSpacing: 0.2,
+                      ),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.asset(
+                          'lib/assets/icons/user.jpeg',
+                          width: 20,
+                          height: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
                       'Password',
                       style: GoogleFonts.getFont(
                         'Nunito Sans',
@@ -108,7 +154,7 @@ class LoginScreen extends StatelessWidget {
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Enter your Password';
+                        return "Enter your password";
                       } else {
                         return null;
                       }
@@ -141,43 +187,31 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        print('pass');
+                        print("correct");
                       } else {
-                        print('fail');
+                        print("failed");
                       }
                     },
-                    child: InkWell(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          print('Pass');
-                        } else {
-                          print('Fail');
-                        }
-                      },
-                      child: Container(
-                        width: 319,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF102DE1),
-                              Color(0xCC0D6EFF),
-                            ],
-                          ),
+                    child: Container(
+                      width: 319,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF102DE1),
+                            Color(0xCC0D6EFF),
+                          ],
                         ),
-                        child: Center(
-                          child: Text(
-                            "Sing in",
-                            style: GoogleFonts.getFont('Lato',
-                                fontSize: 17, color: Colors.white),
-                          ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Sing Up",
+                          style: GoogleFonts.getFont('Lato',
+                              fontSize: 17, color: Colors.white),
                         ),
                       ),
                     ),
@@ -189,7 +223,7 @@ class LoginScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Need an account ?",
+                        "Already have an account ?",
                         style: GoogleFonts.roboto(
                           fontWeight: FontWeight.w500,
                           letterSpacing: 1,
@@ -201,13 +235,13 @@ class LoginScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return RegisterScreen();
+                                return LoginScreen();
                               },
                             ),
                           );
                         },
                         child: Text(
-                          " Sign Up",
+                          " Sign In",
                           style: GoogleFonts.roboto(
                             color: Color(0xFF103DE5),
                             fontWeight: FontWeight.bold,
