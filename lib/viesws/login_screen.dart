@@ -4,10 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/viesws/register_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  LoginScreen({super.key});
+  late String email;
+
+  late String password;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +69,9 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      email = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Enter your Email';
@@ -106,6 +118,9 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      password = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Enter your Password';
@@ -145,17 +160,11 @@ class LoginScreen extends StatelessWidget {
                     height: 20,
                   ),
                   InkWell(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        print('pass');
-                      } else {
-                        print('fail');
-                      }
-                    },
                     child: InkWell(
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
-                          print('Pass');
+                          print(email);
+                          print(password);
                         } else {
                           print('Fail');
                         }
