@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/controllers/auth_controller.dart';
+import 'package:shopapp/viesws/main_screen.dart';
 import 'package:shopapp/viesws/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,7 +24,21 @@ class _LoginScreenState extends State<LoginScreen> {
   loginUser() async {
     String res = await _authController.loginUser(email, password);
     if (res == 'success') {
-      print('Logged in');
+      Future.delayed(
+        Duration.zero,
+        () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return MainScreen();
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Logged in')));
+        },
+      );
     } else {
       print(res);
     }
