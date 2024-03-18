@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,8 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   late String email;
 
   late String password;
-
+  bool _isLoading = false;
+  bool _isObscure = true;
   loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
     String res = await _authController.loginUser(email, password);
     if (res == 'success') {
       Future.delayed(
@@ -40,7 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
     } else {
-      print(res);
+      setState(() {
+        _isLoading = false;
+      });
+
+      Future.delayed(Duration.zero, () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(res)));
+      });
     }
   }
 
@@ -144,6 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   TextFormField(
+                    obscureText: _isObscure,
                     onChanged: (value) {
                       password = value;
                     },
@@ -176,7 +188,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 20,
                         ),
                       ),
-                      suffixIcon: Icon(Icons.visibility),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -207,11 +228,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         child: Center(
-                          child: Text(
-                            "Sing in",
-                            style: GoogleFonts.getFont('Lato',
-                                fontSize: 17, color: Colors.white),
-                          ),
+                          child: _isLoading
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  "Sing in",
+                                  style: GoogleFonts.getFont('Lato',
+                                      fontSize: 17, color: Colors.white),
+                                ),
                         ),
                       ),
                     ),

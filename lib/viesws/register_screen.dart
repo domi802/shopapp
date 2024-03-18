@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_local_variable, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final AuthController _authController = AuthController();
+  bool _isLoading = false;
 
   late String email;
 
@@ -23,8 +24,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   late String name;
 
+  bool _isObscure = true;
+
   registerUser() async {
     BuildContext localContext = context;
+    setState(() {
+      _isLoading = true;
+    });
     String res = await _authController.registerNewUser(email, name, password);
     if (res == 'success') {
       Future.delayed(
@@ -46,6 +52,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         },
       );
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+
+      Future.delayed(Duration.zero, () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(res)));
+      });
     }
   }
 
@@ -198,6 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
+                    obscureText: _isObscure,
                     onChanged: (value) {
                       password = value;
                     },
@@ -230,7 +246,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 20,
                         ),
                       ),
-                      suffixIcon: Icon(Icons.visibility),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -255,11 +280,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       child: Center(
-                        child: Text(
-                          "Sing Up",
-                          style: GoogleFonts.getFont('Lato',
-                              fontSize: 17, color: Colors.white),
-                        ),
+                        child: _isLoading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "Sing Up",
+                                style: GoogleFonts.getFont('Lato',
+                                    fontSize: 17, color: Colors.white),
+                              ),
                       ),
                     ),
                   ),
