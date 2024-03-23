@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/controllers/auth_controller.dart';
-import 'package:shopapp/viesws/main_screen.dart';
-import 'package:shopapp/viesws/register_screen.dart';
+import 'package:shopapp/views/main_screen.dart';
+import 'package:shopapp/views/auth_screens/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
