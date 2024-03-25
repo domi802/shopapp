@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:shopapp/views/nav_screens/home_screen.dart';
+import 'package:get/get.dart';
+import 'package:shopapp/controllers/category_controllers.dart';
+import 'package:shopapp/views/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +19,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: MainScreen(),
+      initialBinding: BindingsBuilder(() {
+        Get.put<categoryController>(categoryController());
+      }),
     );
   }
 }
