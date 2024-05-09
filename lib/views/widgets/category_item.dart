@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/controllers/category_controllers.dart';
 
 class CategoryItem extends StatefulWidget {
@@ -37,7 +36,7 @@ class _CategoryItemState extends State<CategoryItem> {
                       ),
                       Text(
                         _categoryController.categories[index].CategoryName,
-                        style: GoogleFonts.quicksand(
+                        style: TextStyle(
                             fontSize: 14,
                             letterSpacing: 0.3,
                             fontWeight: FontWeight.bold),

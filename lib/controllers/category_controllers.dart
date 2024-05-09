@@ -21,7 +21,7 @@ class categoryController extends GetxController {
               final data = doc.data() as Map<String, dynamic>;
 
               return CategoryModel(
-                CategoryName: data['CategoryName'],
+                CategoryName: data['categoryName'],
                 categoryImage: data['categoryImage'],
               );
             },
