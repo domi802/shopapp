@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/provider/cart_provider.dart';
+import 'package:shopapp/provider/favorite_provider.dart';
 
 class ProductDetailScreen extends ConsumerStatefulWidget {
   final dynamic productData;
@@ -14,7 +15,9 @@ class ProductDetailScreen extends ConsumerStatefulWidget {
 class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final _cartProvider = ref.read(cartProvider.notifier);
+    final cartProviderData = ref.read(cartProvider.notifier);
+    final favoriteProviderData = ref.read(favoriteProvider.notifier);
+    ref.watch(favoriteProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -31,11 +34,34 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               ),
             ),
             IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.favorite,
-                color: Colors.red,
-              ),
+              onPressed: () {
+                favoriteProviderData.addProductToFavorite(
+                  productName: widget.productData['productName'],
+                  productId: widget.productData['productId'],
+                  imageUrl: widget.productData['productImage'],
+                  productPrice: widget.productData['productPrice'],
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    margin: EdgeInsets.all(15),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.grey,
+                    content: Text(
+                      widget.productData['productName'],
+                    ),
+                  ),
+                );
+              },
+              icon: favoriteProviderData.getFavoriteItem
+                      .containsKey(widget.productData["productId"])
+                  ? Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                  : Icon(
+                      Icons.favorite_border,
+                      color: Colors.red,
+                    ),
             ),
           ],
         ),
@@ -205,7 +231,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
         padding: EdgeInsets.all(8),
         child: InkWell(
           onTap: () {
-            _cartProvider.addProductToCart(
+            cartProviderData.addProductToCart(
               productName: widget.productData['productName'],
               productPrice: widget.productData['productPrice'],
               categoryName: widget.productData['category'],

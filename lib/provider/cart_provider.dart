@@ -57,5 +57,39 @@ class CartNotifier extends StateNotifier<Map<String, CartModel>> {
     }
   }
 
+  //REMOVING ITEM FROM CART
+  void removeItem(String productId) {
+    state.remove(productId);
+    state = {...state};
+  }
+
+  //increment item
+
+  void incrementItem(String productId) {
+    if (state.containsKey(productId)) {
+      state[productId]!.quantity++;
+    }
+    state = {...state};
+  }
+
+  //decrement item
+
+  void decrementItem(String productId) {
+    if (state.containsKey(productId)) {
+      if (state[productId]!.quantity > 1) {
+        state[productId]!.quantity--;
+      }
+    }
+    state = {...state};
+  }
+
+  double calculateTotalAmount() {
+    double totalAmount = 0.00;
+    state.forEach((productId, cartItem) {
+      totalAmount += cartItem.quantity * cartItem.discount;
+    });
+    return totalAmount;
+  }
+
   Map<String, CartModel> get getCartItem => state;
 }
