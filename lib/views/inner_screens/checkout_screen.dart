@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/provider/cart_provider.dart';
+import 'package:shopapp/views/inner_screens/shipping_adress_screen.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
 
@@ -23,6 +24,35 @@ class _checkoutScreenState extends ConsumerState<checkoutScreen> {
   bool isLoading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _selectedPaymentMethod = 'stripe';
+
+  //get current user info
+  String state = '';
+  String city = '';
+  String locality = '';
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
+// get currne user details
+  void getUserData() {
+    Stream<DocumentSnapshot> userDataStream =
+        _firestore.collection('buyers').doc(_auth.currentUser!.uid).snapshots();
+
+    // listen and upadate date
+
+    userDataStream.listen((DocumentSnapshot userData) {
+      if (userData.exists) {
+        setState(() {
+          state = userData.get('state');
+          city = userData.get('city');
+          locality = userData.get('locality');
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _cartProviderData = ref.read(cartProvider);
@@ -36,7 +66,11 @@ class _checkoutScreenState extends ConsumerState<checkoutScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ShippingAdressScreen();
+                }));
+              },
               child: SizedBox(
                 width: 335,
                 height: 74,
@@ -322,88 +356,104 @@ class _checkoutScreenState extends ConsumerState<checkoutScreen> {
           ],
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: InkWell(
-          onTap: () async {
-            if (_selectedPaymentMethod == 'stripe') {
-              // call stripe payment method
-            } else {
-              setState(() {
-                isLoading = true;
-              });
-              for (var item
-                  in ref.read(cartProvider.notifier).getCartItem.values) {
-                DocumentSnapshot userDoc = await _firestore
-                    .collection('buyers')
-                    .doc(_auth.currentUser!.uid)
-                    .get();
-
-                CollectionReference _orderRefer =
-                    _firestore.collection('orders');
-                final orderId = Uuid().v4();
-                await _orderRefer.doc(orderId).set({
-                  'orderId': orderId,
-                  'productName': item.productName,
-                  'productId': item.productId,
-                  'size': item.productSize,
-                  'quantity': item.quantity,
-                  'price': item.quantity * item.productPrice,
-                  'category': item.categoryName,
-                  'productImage': item.imageUrl[0],
-                  'state': (userDoc.data() as Map<String, dynamic>)['state'],
-                  'email': (userDoc.data() as Map<String, dynamic>)['email'],
-                  'locality':
-                      (userDoc.data() as Map<String, dynamic>)['locality'],
-                  'fullName':
-                      (userDoc.data() as Map<String, dynamic>)['fullName'],
-                  'buyerId': _auth.currentUser!.uid,
-                  'deliveredCount': 0,
-                  'delivered': false,
-                  'processing': true,
-                }).whenComplete(() {
-                  _cartProviderData.clear();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return MainScreen();
+      bottomSheet: state == ""
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ShippingAdressScreen();
                   }));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.grey,
-                      content: Text('Order Placed Successfully'),
-                    ),
-                  );
-                  setState(() {
-                    isLoading = false;
-                  });
-                });
-              }
-            }
-          },
-          child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width - 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFF1532E7),
+                },
+                child: Text('Add Address'),
               ),
-              child: Center(
-                child: isLoading
-                    ? CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : Text(
-                        'PLACE ORDER',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          height: 1.4,
-                        ),
-                      ),
-              )),
-        ),
-      ),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: InkWell(
+                onTap: () async {
+                  if (_selectedPaymentMethod == 'stripe') {
+                    // call stripe payment method
+                  } else {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    for (var item
+                        in ref.read(cartProvider.notifier).getCartItem.values) {
+                      DocumentSnapshot userDoc = await _firestore
+                          .collection('buyers')
+                          .doc(_auth.currentUser!.uid)
+                          .get();
+
+                      CollectionReference _orderRefer =
+                          _firestore.collection('orders');
+                      final orderId = Uuid().v4();
+                      await _orderRefer.doc(orderId).set({
+                        'orderId': orderId,
+                        'productName': item.productName,
+                        'productId': item.productId,
+                        'size': item.productSize,
+                        'quantity': item.quantity,
+                        'price': item.quantity * item.productPrice,
+                        'category': item.categoryName,
+                        'productImage': item.imageUrl[0],
+                        'state':
+                            (userDoc.data() as Map<String, dynamic>)['state'],
+                        'email':
+                            (userDoc.data() as Map<String, dynamic>)['email'],
+                        'locality': (userDoc.data()
+                            as Map<String, dynamic>)['locality'],
+                        'fullName': (userDoc.data()
+                            as Map<String, dynamic>)['fullName'],
+                        'buyerId': _auth.currentUser!.uid,
+                        'deliveredCount': 0,
+                        'delivered': false,
+                        'processing': true,
+                        'city':
+                            (userDoc.data() as Map<String, dynamic>)['city'],
+                      }).whenComplete(() {
+                        _cartProviderData.clear();
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return MainScreen();
+                        }));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.grey,
+                            content: Text('Order Placed Successfully'),
+                          ),
+                        );
+                        setState(() {
+                          isLoading = false;
+                        });
+                      });
+                    }
+                  }
+                },
+                child: Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width - 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xFF1532E7),
+                    ),
+                    child: Center(
+                      child: isLoading
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text(
+                              'PLACE ORDER',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                height: 1.4,
+                              ),
+                            ),
+                    )),
+              ),
+            ),
     );
   }
 }

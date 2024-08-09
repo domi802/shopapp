@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopapp/controllers/category_controllers.dart';
+import 'package:shopapp/views/inner_screens/category_product_screen.dart';
 
 class CategoryItem extends StatefulWidget {
   const CategoryItem({super.key});
@@ -25,7 +26,13 @@ class _CategoryItemState extends State<CategoryItem> {
                   mainAxisSpacing: 4, crossAxisSpacing: 8, crossAxisCount: 4),
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CategoryProductScreen(
+                          categoryModel: _categoryController.categories[index]);
+                    }));
+                  },
                   child: Column(
                     children: [
                       Image.network(

@@ -153,11 +153,38 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
             child: Text(
               widget.productData['category'],
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
             ),
           ),
+          widget.productData['rating'] == 0
+              ? Text('')
+              : Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      Text(
+                        widget.productData['rating'].toString(),
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0),
+                      ),
+                      Text(
+                        '(${widget.productData['totalReviews'].toString()})',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 2.0),
+                      ),
+                    ],
+                  ),
+                ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

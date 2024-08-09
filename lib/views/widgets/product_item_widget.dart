@@ -197,7 +197,9 @@ class ProductItemWidget extends StatelessWidget {
               left: 23,
               top: 155,
               child: Text(
-                '4..5',
+                productData['rating'] == 0
+                    ? ""
+                    : productData['rating'].toString(),
                 style: GoogleFonts.lato(
                   color: Color(
                     0xFF7F8E9D,
@@ -206,6 +208,17 @@ class ProductItemWidget extends StatelessWidget {
                 ),
               ),
             ),
+            productData['rating'] == 0
+                ? SizedBox()
+                : Positioned(
+                    left: 8,
+                    top: 158,
+                    child: Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 12,
+                    ),
+                  ),
             Positioned(
               left: 104,
               top: 15,
