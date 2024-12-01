@@ -2,21 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shopapp/controllers/auth_controller.dart';
+
+import 'package:shopapp/vendor/controllers/vendor_controller.dart';
+import 'package:shopapp/vendor/views/auth/screens/main_vendor_screen.dart';
 import 'package:shopapp/vendor/views/auth/vendor_register_screen.dart';
-import 'package:shopapp/views/main_screen.dart';
 import 'package:shopapp/views/auth_screens/register_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+class VendorLoginScreen extends StatefulWidget {
+  VendorLoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<VendorLoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<VendorLoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final AuthController _authController = AuthController();
+  final VendorAuthController _authController = VendorAuthController();
 
   late String email;
 
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return MainScreen();
+                return MainVendorScreen();
               },
             ),
           );
@@ -72,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Login your account",
+                    "Login Vendor's account",
                     style: GoogleFonts.getFont(
                       'Lato',
                       color: const Color(0xFF0d120E),

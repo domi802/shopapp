@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/controllers/banner_controller.dart';
 
@@ -11,7 +10,6 @@ class BannerWidget extends StatefulWidget {
 }
 
 class _BannerWidgetState extends State<BannerWidget> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final BannerController _bannerController = BannerController();
 
   @override

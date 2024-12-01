@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/provider/cart_provider.dart';
 import 'package:shopapp/views/inner_screens/shipping_adress_screen.dart';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/v4.dart';
 
 import '../main_screen.dart';
 

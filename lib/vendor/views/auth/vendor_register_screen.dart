@@ -1,33 +1,37 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_local_variable, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shopapp/controllers/auth_controller.dart';
-import 'package:shopapp/vendor/views/auth/vendor_register_screen.dart';
-import 'package:shopapp/views/main_screen.dart';
-import 'package:shopapp/views/auth_screens/register_screen.dart';
+import 'package:shopapp/vendor/controllers/vendor_controller.dart';
+import 'package:shopapp/vendor/views/auth/vendor_login_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+class VendorRegisterScreen extends StatefulWidget {
+  VendorRegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<VendorRegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<VendorRegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final AuthController _authController = AuthController();
+
+  final VendorAuthController _authController = VendorAuthController();
+  bool _isLoading = false;
 
   late String email;
 
   late String password;
-  bool _isLoading = false;
+
+  late String name;
+
   bool _isObscure = true;
-  loginUser() async {
+
+  registerUser() async {
+    BuildContext localContext = context;
     setState(() {
       _isLoading = true;
     });
-    String res = await _authController.loginUser(email, password);
+    String res = await _authController.registerNewUser(email, name, password);
     if (res == 'success') {
       Future.delayed(
         Duration.zero,
@@ -36,12 +40,16 @@ class _LoginScreenState extends State<LoginScreen> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return MainScreen();
+                return VendorLoginScreen();
               },
             ),
           );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Logged in')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content:
+                  Text('Congratulation account have been creadted for you'),
+            ),
+          );
         },
       );
     } else {
@@ -72,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Login your account",
+                    "Create Vendor's account",
                     style: GoogleFonts.getFont(
                       'Lato',
                       color: const Color(0xFF0d120E),
@@ -112,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Enter your Email';
+                        return 'enter your email';
                       } else {
                         return null;
                       }
@@ -147,6 +155,55 @@ class _LoginScreenState extends State<LoginScreen> {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
+                      'Full Name',
+                      style: GoogleFonts.getFont(
+                        'Nunito Sans',
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    onChanged: (value) {
+                      name = value;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "enter your full name";
+                      } else {
+                        return null;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      labelText: 'enter your full name',
+                      labelStyle: GoogleFonts.getFont(
+                        'Nunito Sans',
+                        fontSize: 14,
+                        letterSpacing: 0.2,
+                      ),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.asset(
+                          'lib/assets/icons/user.jpeg',
+                          width: 20,
+                          height: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
                       'Password',
                       style: GoogleFonts.getFont(
                         'Nunito Sans',
@@ -162,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Enter your Password';
+                        return "Enter your password";
                       } else {
                         return null;
                       }
@@ -204,41 +261,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   InkWell(
-                    child: InkWell(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          loginUser();
-                        } else {
-                          print('Fail');
-                        }
-                      },
-                      child: Container(
-                        width: 319,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF102DE1),
-                              Color(0xCC0D6EFF),
-                            ],
-                          ),
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        registerUser();
+                      }
+                    },
+                    child: Container(
+                      width: 319,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF102DE1),
+                            Color(0xCC0D6EFF),
+                          ],
                         ),
-                        child: Center(
-                          child: _isLoading
-                              ? CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : Text(
-                                  "Sing in",
-                                  style: GoogleFonts.getFont('Lato',
-                                      fontSize: 17, color: Colors.white),
-                                ),
-                        ),
+                      ),
+                      child: Center(
+                        child: _isLoading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "Sing Up",
+                                style: GoogleFonts.getFont('Lato',
+                                    fontSize: 17, color: Colors.white),
+                              ),
                       ),
                     ),
                   ),
@@ -249,7 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Need an account ?",
+                        "Already have an account ?",
                         style: GoogleFonts.roboto(
                           fontWeight: FontWeight.w500,
                           letterSpacing: 1,
@@ -261,47 +311,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return RegisterScreen();
+                                return VendorLoginScreen();
                               },
                             ),
                           );
                         },
                         child: Text(
-                          " Sign Up",
-                          style: GoogleFonts.roboto(
-                            color: Color(0xFF103DE5),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Become a Vendor",
-                        style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return VendorRegisterScreen();
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          " Sign Up",
+                          " Sign In",
                           style: GoogleFonts.roboto(
                             color: Color(0xFF103DE5),
                             fontWeight: FontWeight.bold,
