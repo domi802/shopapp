@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shopapp/vendor/views/auth/screens/bottomNavigationBar/earnings_screen.dart';
 import 'package:shopapp/vendor/views/auth/screens/bottomNavigationBar/edit_product.screen.dart';
 import 'package:shopapp/vendor/views/auth/screens/bottomNavigationBar/upload_product_screen.dart';
+import 'package:shopapp/vendor/views/auth/screens/bottomNavigationBar/vendor_order_screen.dart';
 import 'package:shopapp/vendor/views/auth/screens/bottomNavigationBar/vendor_profile_screen.dart';
 
 class MainVendorScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
   final List<Widget> _pages = [
     EarningScreen(),
     UploadProductScreen(),
+    VendorOrderScreen(),
     EditProductScreen(),
     VendorProfileScreen(),
   ];
@@ -41,6 +43,10 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.upload_circle),
             label: 'Upload',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.shopping_cart),
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),

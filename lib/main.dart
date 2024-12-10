@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:shopapp/controllers/category_controllers.dart';
 import 'package:shopapp/controllers/firebase_options.dart';
-import 'package:shopapp/views/main_screen.dart';
+import 'package:shopapp/vendor/views/auth/screens/main_vendor_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: MainVendorScreen(),
       initialBinding: BindingsBuilder(() {
         Get.put<categoryController>(categoryController());
       }),
