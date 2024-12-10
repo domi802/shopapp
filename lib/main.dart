@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:shopapp/controllers/category_controllers.dart';
 import 'package:shopapp/controllers/firebase_options.dart';
-import 'package:shopapp/vendor/views/auth/screens/main_vendor_screen.dart';
 import 'package:shopapp/views/main_screen.dart';
 
 void main() async {
