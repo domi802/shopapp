@@ -80,34 +80,50 @@ class ProductItemWidget extends StatelessWidget {
                 ),
               ),
             ),
+            // Wyświetlanie ceny i rabatu
             Positioned(
               left: 7,
               top: 207,
-              child: Text(
-                '\$${productData['discount']}',
-                style: GoogleFonts.lato(
-                  color: Color(
-                    0xFF1E3354,
-                  ),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.4,
-                ),
-              ),
-            ),
-            Positioned(
-              left: 51,
-              top: 210,
-              child: Text(
-                '\$${productData['productPrice']}',
-                style: GoogleFonts.lato(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  letterSpacing: 0.3,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.lineThrough,
-                ),
-              ),
+              child: productData['discount'] == 0.0
+                  ? Text(
+                      '\$${productData['productPrice']}',
+                      style: GoogleFonts.lato(
+                        color: Color(
+                          0xFF1E3354,
+                        ),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.4,
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        Text(
+                          '\$${productData['discount']}',
+                          style: GoogleFonts.lato(
+                            color: Color(
+                              0xFF1E3354,
+                            ),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                        SizedBox(
+                            width:
+                                5), // Odstęp między ceną zniżki a przekreśloną ceną
+                        Text(
+                          '\$${productData['productPrice']}',
+                          style: GoogleFonts.lato(
+                            color: Colors.grey[400], // Jaśniejszy szary kolor
+                            fontSize: 16, // Mniejszy rozmiar czcionki
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.lineThrough,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
+                    ),
             ),
             Positioned(
               left: 9,

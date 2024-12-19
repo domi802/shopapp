@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -302,7 +300,7 @@ class _LoginScreenState extends State<VendorLoginScreen> {
                           );
                         },
                         child: Text(
-                          " Sign Up",
+                          " Register",
                           style: GoogleFonts.roboto(
                             color: Color(0xFF103DE5),
                             fontWeight: FontWeight.bold,

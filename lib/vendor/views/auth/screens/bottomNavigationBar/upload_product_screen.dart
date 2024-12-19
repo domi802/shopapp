@@ -92,7 +92,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         'productSize': _sizeList,
         'category': selectedCategory,
         'description': description,
-        'discount': discount,
+        'discount': discount ?? 0.00,
         'quantity': quantity,
         'productImage': _imageUrls,
         'vendorId': FirebaseAuth.instance.currentUser!.uid,
@@ -242,18 +242,11 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       if (value.isNotEmpty && int.tryParse(value) != null) {
                         discount = int.parse(value);
                       } else {
-                        discount = 0;
-                      }
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'enter field';
-                      } else {
-                        return null;
+                        discount = null;
                       }
                     },
                     decoration: InputDecoration(
-                      labelText: 'Discount',
+                      labelText: 'Discount (Optional)',
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(

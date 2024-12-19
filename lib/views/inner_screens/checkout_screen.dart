@@ -302,16 +302,47 @@ class _checkoutScreenState extends ConsumerState<checkoutScreen> {
                                   SizedBox(
                                     width: 6,
                                   ),
-                                  Text(
-                                    cartItem.discount.toStringAsFixed(2),
-                                    style: GoogleFonts.getFont(
-                                      'Lato',
-                                      color: Colors.blue,
-                                      fontSize: 14,
-                                      height: 1.3,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  // Jeśli jest zniżka
+                                  cartItem.discount > 0
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            // Przekreślona cena produktu
+                                            Text(
+                                              '\$${cartItem.productPrice.toStringAsFixed(2)}',
+                                              style: GoogleFonts.getFont(
+                                                'Lato',
+                                                color: Colors.red,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+                                            // Cena z uwzględnieniem zniżki
+                                            Text(
+                                              '\$${(cartItem.discount).toStringAsFixed(2)}',
+                                              style: GoogleFonts.getFont(
+                                                'Lato',
+                                                color: Colors.blue,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : // Jeśli nie ma zniżki
+                                      Text(
+                                          '\$${cartItem.productPrice.toStringAsFixed(2)}',
+                                          style: GoogleFonts.getFont(
+                                            'Lato',
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                 ],
                               ),
                             ),

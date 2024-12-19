@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     final cartData = ref.watch(cartProvider);
     final _cartProvider = ref.read(cartProvider.notifier);
     final _totalAmount = ref.read(cartProvider.notifier).calculateTotalAmount();
+
+    bool isCartEmpty = cartData.isEmpty || _totalAmount == 0.0;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
@@ -88,7 +90,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Your shopping cart is empty\n You can add proructs to your cart from the button below",
+                    "Your shopping cart is empty\n You can add products to your cart from the button below",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.roboto(
                       fontSize: 17,
@@ -158,7 +160,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           left: 69,
                           top: 14,
                           child: Text(
-                              'you have ${cartData.length} item in your cart',
+                              'You have ${cartData.length} item in your cart',
                               style: GoogleFonts.lato(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -170,122 +172,146 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ),
                   ),
                   ListView.builder(
-                      itemCount: cartData.length,
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final cartItem = cartData.values.toList()[index];
+                    itemCount: cartData.length,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final cartItem = cartData.values.toList()[index];
 
-                        return Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Card(
-                            child: SizedBox(
-                              height: 200,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 100,
-                                    width: 100,
-                                    child: Image.network(
-                                      cartItem.imageUrl[0],
-                                      fit: BoxFit.cover,
-                                    ),
+                      return Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Card(
+                          child: SizedBox(
+                            height: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.network(
+                                    cartItem.imageUrl[0],
+                                    fit: BoxFit.cover,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          cartItem.productName,
-                                          style: GoogleFonts.lato(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        cartItem.productName,
+                                        style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
                                         ),
-                                        Text(
-                                          cartItem.categoryName,
-                                          style: GoogleFonts.lato(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.blueGrey,
-                                          ),
+                                      ),
+                                      Text(
+                                        cartItem.categoryName,
+                                        style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.blueGrey,
                                         ),
-                                        Text(
-                                          cartItem.discount.toStringAsFixed(2),
-                                          style: GoogleFonts.lato(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.pink,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Container(
-                                              height: 40,
-                                              width: 120,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFF102DE1),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      _cartProvider
-                                                          .decrementItem(
-                                                              cartItem
-                                                                  .productId);
-                                                    },
-                                                    icon: Icon(
-                                                      CupertinoIcons.minus,
-                                                      color: Colors.white,
-                                                    ),
+                                      ),
+                                      // Wyświetlanie ceny
+                                      cartItem.discount > 0
+                                          ? Row(
+                                              children: [
+                                                Text(
+                                                  '\$${cartItem.discount.toStringAsFixed(2)}', // cena z rabatem
+                                                  style: GoogleFonts.lato(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.pink,
                                                   ),
-                                                  Text(
-                                                    cartItem.quantity
-                                                        .toString(),
-                                                    style: GoogleFonts.lato(
-                                                        color: Colors.white),
+                                                ),
+                                                SizedBox(
+                                                    width:
+                                                        5), // Odstęp między ceną zniżkową a przekreśloną ceną
+                                                Text(
+                                                  '\$${cartItem.productPrice.toStringAsFixed(2)}', // przekreślona cena oryginalna
+                                                  style: GoogleFonts.lato(
+                                                    fontSize:
+                                                        14, // mniejszy rozmiar czcionki
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.grey[
+                                                        400], // jasny szary kolor
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
                                                   ),
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      _cartProvider
-                                                          .incrementItem(
-                                                              cartItem
-                                                                  .productId);
-                                                    },
-                                                    icon: Icon(
-                                                      CupertinoIcons.plus,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
+                                              ],
+                                            )
+                                          : Text(
+                                              '\$${cartItem.productPrice.toStringAsFixed(2)}', // cena bez rabatu
+                                              style: GoogleFonts.lato(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            IconButton(
-                                              onPressed: () {
-                                                _cartProvider.removeItem(
-                                                    cartItem.productId);
-                                              },
-                                              icon: Icon(
-                                                CupertinoIcons.delete,
-                                              ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 40,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF102DE1),
                                             ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                            child: Row(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    _cartProvider.decrementItem(
+                                                        cartItem.productId);
+                                                  },
+                                                  icon: Icon(
+                                                    CupertinoIcons.minus,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  cartItem.quantity.toString(),
+                                                  style: GoogleFonts.lato(
+                                                      color: Colors.white),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    _cartProvider.incrementItem(
+                                                        cartItem.productId);
+                                                  },
+                                                  icon: Icon(
+                                                    CupertinoIcons.plus,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              _cartProvider.removeItem(
+                                                  cartItem.productId);
+                                            },
+                                            icon: Icon(
+                                              CupertinoIcons.delete,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      })
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             ),
@@ -311,7 +337,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ),
             ),
             Align(
-              alignment: Alignment(-0.63, -0.26),
+              alignment: Alignment(-0.63, 0.1),
               child: Text(
                 'Total',
                 style: GoogleFonts.roboto(
@@ -322,7 +348,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ),
             ),
             Align(
-              alignment: Alignment(-0.19, -0.31),
+              alignment: Alignment(-0.19, 0.1),
               child: Text(
                 _totalAmount.toStringAsFixed(2),
                 style: GoogleFonts.roboto(
@@ -333,47 +359,60 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ),
             ),
             Align(
-              alignment: Alignment(0.83, -1),
+              alignment: Alignment(0.83, 0.1),
               child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return checkoutScreen();
+                onTap: isCartEmpty
+                    ? null // Wyłącza możliwość kliknięcia, jeśli koszyk jest pusty
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return checkoutScreen();
+                            },
+                          ),
+                        );
                       },
-                    ),
-                  );
-                },
                 child: Container(
                   width: 166,
-                  height: 71,
-                  clipBehavior: Clip.hardEdge,
+                  height: 55,
+                  padding: EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
-                    color:
-                        _totalAmount == 0.0 ? Colors.grey : Color(0xFF1532E7),
-                  ),
-                  child: Center(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Checkout',
-                        style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
+                    color: isCartEmpty ? Colors.grey : Color(0xFF1532E7),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x0f040828),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                        offset: Offset(0, 4),
                       ),
                     ],
-                  )),
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Checkout',
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

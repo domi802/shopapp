@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_local_variable, prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/vendor/controllers/vendor_controller.dart';
@@ -27,7 +25,6 @@ class _RegisterScreenState extends State<VendorRegisterScreen> {
   bool _isObscure = true;
 
   registerUser() async {
-    BuildContext localContext = context;
     setState(() {
       _isLoading = true;
     });

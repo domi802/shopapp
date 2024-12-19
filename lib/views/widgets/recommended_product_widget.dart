@@ -29,8 +29,12 @@ class RecommendedProductWidget extends StatelessWidget {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final productData = snapshot.data!.docs[index];
-              return ProductItemWidget(
-                productData: productData,
+              return Padding(
+                padding: EdgeInsets.only(
+                    right: 12.0), // Dodanie odstępu między produktami
+                child: ProductItemWidget(
+                  productData: productData,
+                ),
               );
             },
           ),

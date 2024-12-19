@@ -289,6 +289,31 @@ class _VendorOrderDetailScreenState extends State<VendorOrderDetailScreen> {
                               letterSpacing: 2,
                               color: Color(0xFF7F808C),
                             )),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await FirebaseFirestore.instance
+                                .collection('orders')
+                                .doc(widget.orderData['orderId'])
+                                .update({
+                              'delivered': true,
+                              'processing': false,
+                              'deliveredCount': FieldValue.increment(1),
+                            });
+                          },
+                          child: widget.orderData['delivered'] == true
+                              ? const Text(
+                                  'Delivered',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                )
+                              : const Text(
+                                  'Mark Delive',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                        )
                       ],
                     ),
                   ),

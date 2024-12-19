@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopapp/controllers/auth_controller.dart';
+import 'package:shopapp/vendor/views/auth/vendor_login_screen.dart';
 import 'package:shopapp/vendor/views/auth/vendor_register_screen.dart';
 import 'package:shopapp/views/main_screen.dart';
 import 'package:shopapp/views/auth_screens/register_screen.dart';
@@ -295,7 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return VendorRegisterScreen();
+                                return VendorLoginScreen();
                               },
                             ),
                           );
