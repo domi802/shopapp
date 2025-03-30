@@ -62,8 +62,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   //method to upload image we select
   uploadProductImages() async {
     for (var image in images) {
-      Reference ref =
-          _firebaseStorage.ref().child('productImages').child(Uuid().v4());
+      Reference ref = _firebaseStorage.ref().child('productImages').child(Uuid().v4());
       await ref.putFile(image).whenComplete(() async {
         await ref.getDownloadURL().then((value) {
           setState(() {
@@ -78,10 +77,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     setState(() {
       _isLoading = true;
     });
-    DocumentSnapshot vendorDoc = await _firestore
-        .collection('vendors')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    DocumentSnapshot vendorDoc =
+        await _firestore.collection('vendors').doc(FirebaseAuth.instance.currentUser!.uid).get();
     await uploadProductImages();
     if (_imageUrls.isNotEmpty) {
       final productId = const Uuid().v4();
@@ -100,6 +97,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         'vendorEmail': (vendorDoc.data() as Map<String, dynamic>)['email'],
         'rating': 0,
         'totalReviews': 0,
+        'isPopular': false,
       }).whenComplete(() {
         setState(() {
           _isLoading = false;
@@ -112,10 +110,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
 
   _getCategories() {
-    return _firestore
-        .collection('categories')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
+    return _firestore.collection('categories').get().then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         setState(() {
           _categoryList.add(doc['categoryName']);
@@ -201,8 +196,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       Flexible(
                         child: TextFormField(
                           onChanged: (value) {
-                            if (value.isNotEmpty &&
-                                double.tryParse(value) != null) {
+                            if (value.isNotEmpty && double.tryParse(value) != null) {
                               productPrice = double.parse(value);
                             } else {
                               productPrice = 0.0;
@@ -376,8 +370,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.blue.shade800,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
